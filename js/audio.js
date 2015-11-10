@@ -33,6 +33,7 @@
 	window.start = function () {
 		if (source) {
 			source.start(0);
+			drowTriangleOnPlayButton('green'); 
 		} else { 
 			alert("Выберите песню!");
 		}
@@ -41,6 +42,8 @@
 	window.stop = function () {
 		if (source) {
 			source.stop(0);
+			drowTriangleOnPlayButton('black');
+			drowSquareOnStopButton('red');
 		} else {
 			alert("Выберите песню!");
 		}	

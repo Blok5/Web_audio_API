@@ -33,18 +33,20 @@
 	window.start = function () {
 		if (source) {
 			source.start(0);
+			drowTriangleOnPlayButton('green');
+			drowSquareOnStopButton('black'); 
 		} else { 
 			alert("Выберите песню!");
-			return;
 		}
 	};
 
 	window.stop = function () {
 		if (source) {
 			source.stop(0);
+			drowTriangleOnPlayButton('black');
+			drowSquareOnStopButton('red');
 		} else {
 			alert("Выберите песню!");
-			return;
 		}	
 	};
 
