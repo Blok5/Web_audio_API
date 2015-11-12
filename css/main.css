@@ -31,7 +31,7 @@ a img {border: none;}
 	height:0;
 }
 h1 {
-	color: orange;
+	color: yellow;
 }
 body {
 	font-family: 'Open Sans', sans-serif;
@@ -43,7 +43,7 @@ a:link, a:visited {
 }
 
 #tutorial {
-	margin: 3%;
+	margin: 4%;
 	border: 1px solid #000;
 	float: right;
 }

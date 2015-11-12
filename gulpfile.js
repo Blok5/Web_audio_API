@@ -30,10 +30,10 @@ gulp.task('bower', function() {
 //css
 gulp.task('css', function () {
 	gulp.src('./css/*.css')
-		.pipe(concatCSS("*.css"))
-		.pipe(uncss({
-			html: ['app/index.html']
-		}))
+		.pipe(concatCSS("./css/*.css"))
+		// .pipe(uncss({
+		// 	html: ['app/index.html']
+		// }))
 		.pipe(minifyCSS())
 		.pipe(rename('css.min.css'))
 		.pipe(gulp.dest('app/css'))
