@@ -30,7 +30,7 @@ gulp.task('bower', function() {
 //css
 gulp.task('css', function () {
 	gulp.src('./css/*.css')
-		.pipe(concatCSS("css.css"))
+		.pipe(concatCSS("*.css"))
 		.pipe(uncss({
 			html: ['app/index.html']
 		}))
@@ -50,13 +50,19 @@ gulp.task('html' , function () {
 		.pipe(notify('HTML was changed Succesful'));
 });
 
+//img
+gulp.task('img' , function () {
+	gulp.src('./img/*')
+		.pipe(gulp.dest('app/img'))
+		.pipe(connect.reload())
+		.pipe(notify('Img was changed Succesful'));
+});
 //js
 gulp.task('js' , function () {
-	gulp.src('./js/js.js')
-		.pipe(rename('js.js'))
+	gulp.src('./js/*.js')
 		.pipe(gulp.dest('app/js'))
 		.pipe(connect.reload())
-		.pipe(notify('JS was changed Succesful'));
+		.pipe(notify('js was changed Succesful'));
 });
 
 //watch
@@ -65,6 +71,7 @@ gulp.task('watch', function () {
 	gulp.watch(['./css/*.css'], ['css']);
 	gulp.watch(['./index.html'], ['html']);
 	gulp.watch(['./js/*.js'], ['js']);
+	gulp.watch(['./img/*'], ['img']);
 });
 
 gulp.task('default', ['connect', 'watch']);

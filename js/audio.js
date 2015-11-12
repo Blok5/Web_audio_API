@@ -14,6 +14,10 @@
 		xhr.open('GET','http://localhost:3000/music/ex.mp3',true);
 		xhr.responseType = 'arraybuffer';
 
+		xhr.onprogress = function (event) {
+			console.log("Загружено: " + event.loaded + " / " + event.total);
+		};
+
 		xhr.onload = function () {
 			var audioData = xhr.response;
 			source = audioCtx.createBufferSource();
@@ -33,7 +37,6 @@
 	window.start = function () {
 		if (source) {
 			source.start(0);
-			drowTriangleOnPlayButton('green'); 
 		} else { 
 			alert("Выберите песню!");
 		}
@@ -42,8 +45,6 @@
 	window.stop = function () {
 		if (source) {
 			source.stop(0);
-			drowTriangleOnPlayButton('black');
-			drowSquareOnStopButton('red');
 		} else {
 			alert("Выберите песню!");
 		}	
