@@ -4,21 +4,24 @@
   	<link rel="stylesheet" type="text/css" href="css/css.min.css">
 	<meta charset="UTF-8">
 	<title>Web audio API</title>
-
+	<script type="text/javascript" src = "js/audio.js"></script>
+	<script type="text/javascript" src = "js/canvas.js"></script>
 	<!-- bower:css -->
 	<!-- endbower -->
 </head>
 
-<body style="background: url(img/mainBackground.png) #142736;" onload="drow();">
+<body style="background: url(img/mainBackground.png) #142736;">
 
 	<div class="container">
 		<h1>Web audio API1</h1>
 
 		<canvas id="tutorial" width="700" height="200"></canvas>
-		<button class="button">Запись</button>
+		<button id="startBtn" class="button" onclick="start();">Стапт</button>
+		<button id="stopBtn" class="button" onclick="stop();">Стоп</button>
+		<button id="recordBtn" class="button" onclick="record();">Запись</button>
 	</div>
-	<script type="text/javascript" src = "js/canvas.js"></script>
-	<script type="text/javascript" src = "js/audio.js"></script>
+	
+	
 	<!-- bower:js -->
 	<!-- endbower -->
 </body>

@@ -1,10 +1,57 @@
 'use strict';
 
 (function () {
+	
+	var source, audioContext;
 
-	window.AudioContext = window.AudioContext || window.webkitAudioContext;
-	var audioCtx = new AudioContext();
-	var source;
+
+	var Buffer = function (audioContext) {
+		
+	};
+
+	window.record = function () {
+
+			var audioCtx = window.AudioContext || window.webkitAudioContext;
+			audioContext = new audioCtx();
+
+			navigator.getUserMedia = navigator.getUserMedia ||
+	                          navigator.webkitGetUserMedia ||
+	                          navigator.mozGetUserMedia ||
+	                          navigator.msGetUserMedia;
+
+	        
+
+			navigator.getUserMedia({audio: true}, function (stream) { 
+				source =  audioContext.createMediaStreamSource(stream);
+				console.log(audioContext.state);
+
+			}, function (e) {
+				console.log(e);
+			});
+
+			
+
+	};
+
+
+	window.stop = function () {
+		audioContext.close().then(function () {
+			document.getElementById("stopBtn").setAttribute('disabled','disabled');
+			document.getElementById("startBtn").removeAttribute('disabled');
+			console.log(audioContext.state);	
+		});
+	};
+
+	
+	
+	window.start = function () {
+		document.getElementById("startBtn").setAttribute('disabled','disabled');
+		document.getElementById("stopBtn").removeAttribute('disabled');
+		console.log('play!');
+		source.connect(audioContext.destination);
+		source.start();	
+	};
+
 
 
 	window.getData = function() {
@@ -34,20 +81,8 @@
   
 	}
 
-	window.start = function () {
-		if (source) {
-			source.start(0);
-		} else { 
-			alert("Выберите песню!");
-		}
-	};
 
-	window.stop = function () {
-		if (source) {
-			source.stop(0);
-		} else {
-			alert("Выберите песню!");
-		}	
-	};
+
+
 
 })();
