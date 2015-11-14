@@ -24,15 +24,13 @@
 			navigator.getUserMedia({audio: true}, function (stream) { 
 				source =  audioContext.createMediaStreamSource(stream);
 				console.log(audioContext.state);
-
+				source.connect(audioContext.destination);
 			}, function (e) {
 				console.log(e);
 			});
 
-			
-
+		
 	};
-
 
 	window.stop = function () {
 		audioContext.close().then(function () {
@@ -47,8 +45,7 @@
 	window.start = function () {
 		document.getElementById("startBtn").setAttribute('disabled','disabled');
 		document.getElementById("stopBtn").removeAttribute('disabled');
-		console.log('play!');
-		source.connect(audioContext.destination);
+		console.log('play!');		
 		source.start();	
 	};
 
