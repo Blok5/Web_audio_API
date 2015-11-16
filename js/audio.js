@@ -6,25 +6,24 @@
 
 	window.record = function () {
 
-			var audioCtx = window.AudioContext || window.webkitAudioContext;
-			audioContext = new audioCtx();
+		var audioCtx = window.AudioContext || window.webkitAudioContext;
+		audioContext = new audioCtx();
 
-			navigator.getUserMedia = navigator.getUserMedia ||
-	                          navigator.webkitGetUserMedia ||
-	                          navigator.mozGetUserMedia ||
-	                          navigator.msGetUserMedia;
+		navigator.getUserMedia = navigator.getUserMedia ||
+	    	                     navigator.webkitGetUserMedia ||
+	        	                 navigator.mozGetUserMedia ||
+	            	             navigator.msGetUserMedia;
 
 	        
 
-			navigator.getUserMedia({audio: true}, function (stream) { 
-				source =  audioContext.createMediaStreamSource(stream);
-				console.log(audioContext.state);
-				source.connect(audioContext.destination);
-			}, function (e) {
-				console.log(e);
-			});
+		navigator.getUserMedia({audio: true}, function (stream) { 
+			source =  audioContext.createMediaStreamSource(stream);
+			console.log(audioContext.state);
+			source.connect(audioContext.destination);
+		}, function (e) {
+			console.log(e);
+		});
 
-		
 	};
 
 	window.stop = function () {
