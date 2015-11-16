@@ -1,10 +1,10 @@
 var gulp = require('gulp'),
-    concatCSS = require('gulp-concat-css'),
     minifyCSS = require('gulp-minify-css'),
     rename = require('gulp-rename'),
     connect = require('gulp-connect'),
     uncss = require('gulp-uncss'),
     notify = require('gulp-notify'),
+   	sass = require('gulp-sass'),
 	wiredep = require('wiredep').stream;
 
 //gulp-connect
@@ -29,11 +29,8 @@ gulp.task('bower', function() {
 
 //css
 gulp.task('css', function () {
-	gulp.src('./css/*.css')
-		.pipe(concatCSS("./css/*.css"))
-		// .pipe(uncss({
-		// 	html: ['app/index.html']
-		// }))
+	gulp.src('./scss/main.scss')
+		.pipe(sass())
 		.pipe(minifyCSS())
 		.pipe(rename('css.min.css'))
 		.pipe(gulp.dest('app/css'))
@@ -67,8 +64,9 @@ gulp.task('js' , function () {
 
 //watch
 gulp.task('watch', function () {
+
 	gulp.watch(['./bower.json'], ['bower']);
-	gulp.watch(['./css/*.css'], ['css']);
+	gulp.watch(['./scss/*.scss'], ['css']);
 	gulp.watch(['./index.html'], ['html']);
 	gulp.watch(['./js/*.js'], ['js']);
 	gulp.watch(['./img/*'], ['img']);

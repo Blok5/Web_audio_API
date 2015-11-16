@@ -4,11 +4,6 @@
 	
 	var source, audioContext;
 
-
-	var Buffer = function (audioContext) {
-		
-	};
-
 	window.record = function () {
 
 			var audioCtx = window.AudioContext || window.webkitAudioContext;

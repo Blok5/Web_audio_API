@@ -28,7 +28,10 @@ hr, .hide {
 	display: none;
 }
 
-a img {border: none;}
+a img {
+	border: none;
+}
+
 .group:after {
 	content:".";
 	display:block;
@@ -36,31 +39,4 @@ a img {border: none;}
 	visibility:hidden;
 	line-height:0;
 	height:0;
-}
-
-h1 {
-	color: yellow;
-}
-
-body {
-	font-family: 'Open Sans', sans-serif;
-	background: #fff;
-}
-
-a:link, a:visited {
-	outline: none;
-	text-decoration: none;
-}
-
-#tutorial {
-	margin: 4%;
-	border: 1px solid #000;
-	float: right;
-}
-
-.container {
-	max-width: 2048px;
-	width: 83.333%;
-	margin-left: auto;
-	margin-right: auto;
 }
