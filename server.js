@@ -7,7 +7,7 @@ http.createServer(function (request, response) {
 
 	var pathName = request.url;
 
-	if ( pathName.lastIndexOf('/') === pathName.length-1 ) {
+	if ( pathName.lastIndexOf('/') == pathName.length-1 ) {
 		pathName = '/index.html';
 	}
 
