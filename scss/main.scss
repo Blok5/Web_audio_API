@@ -1,5 +1,4 @@
 $blue: #aaa;
-$red: #f00;
 
 html, body, div, span, object, iframe,
 h1, h2 , h3, h4, h5, h6, p, blockquote, pre,
@@ -44,10 +43,9 @@ a img {
 	height:0;
 }
 
-
 body {
 	font-family: 'Open Sans', sans-serif;
-	background: $red;
+	background: $blue;
 }
 
 a:link, a:visited {
@@ -74,8 +72,7 @@ a:link, a:visited {
 		position: absolute;
 		left: 75px;
 		top: 47px;
-	}
-	
+	}	
 
 	li {
 		padding-bottom: 10px;
@@ -84,7 +81,6 @@ a:link, a:visited {
 	audio {
 		padding-right: 10px;
 	}
-
 }
 
 h1, h2 {

@@ -2,7 +2,6 @@ var gulp = require('gulp'),
     minifyCSS = require('gulp-minify-css'),
     rename = require('gulp-rename'),
     connect = require('gulp-connect'),
-    uncss = require('gulp-uncss'),
     notify = require('gulp-notify'),
    	sass = require('gulp-sass'),
 	wiredep = require('wiredep').stream;

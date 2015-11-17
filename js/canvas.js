@@ -6,8 +6,8 @@
 		
 		var canvas = document.getElementById('tutorial');
 
-		var canvasLeft = canvas.offsetLeft,
-			canvasTop = canvas.offsetTop;
+		//var canvasLeft = canvas.offsetLeft,
+			//canvasTop = canvas.offsetTop;
 
 			if (canvas.getContext) {
 

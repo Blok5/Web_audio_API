@@ -5,9 +5,9 @@
 		
 		var indic = document.getElementById('recordIndicator');
 		var stopBtn = document.getElementById('stopBtn');
-		
+
 		var intervalID = setInterval(function () {
-			if (indic.style.background == 'red') {
+			if (indic.style.background === 'red') {
 				indic.style.background = '';
 			} else {
 				indic.style.background = 'red';

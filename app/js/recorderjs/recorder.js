@@ -22,7 +22,7 @@
       currCallback;
 
     this.node.onaudioprocess = function(e){
-      if (!recording) return;
+      if (!recording) { return; }
       var buffer = [];
       for (var channel = 0; channel < numChannels; channel++){
           buffer.push(e.inputBuffer.getChannelData(channel));
@@ -61,7 +61,7 @@
     this.exportWAV = function(cb, type){
       currCallback = cb || config.callback;
       type = type || config.type || 'audio/wav';
-      if (!currCallback) throw new Error('Callback not set');
+      if (!currCallback) { throw new Error('Callback not set'); }
       worker.postMessage({
         command: 'exportWAV',
         type: type

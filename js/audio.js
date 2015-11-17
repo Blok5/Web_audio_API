@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 
-	var source, audioContext, recorder;
+	var audioContext, recorder;
 
 	function startUserMedia (stream) {
 		var input = audioContext.createMediaStreamSource(stream);
@@ -35,8 +35,6 @@
     	    var au = document.createElement('audio');
       		var hf = document.createElement('a');
 
-
-
       		au.controls = true;
       		au.src = url;
       		hf.href = url;
@@ -48,8 +46,7 @@
       		recordingslist.appendChild(li);
 
       		console.log('Link was created');
-    	});
-		
+    	})
 	}
 
 
@@ -62,13 +59,10 @@
 	    	                     navigator.webkitGetUserMedia ||
 	        	                 navigator.mozGetUserMedia ||
 	            	             navigator.msGetUserMedia;
-
 	        
-
 		navigator.getUserMedia({audio: true}, startUserMedia, function (e) {
 			console.log(e);
 		});
-
 	};
 
 	window.startRecording = startRecording;
