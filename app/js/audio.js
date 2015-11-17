@@ -3,26 +3,33 @@
 
 	var audioContext, recorder;
 
+	function __log (text) {
+		var li = document.createElement('li');
+		li.innerHTML = text;
+		logList.appendChild(li);
+
+	}
+
 	function startUserMedia (stream) {
 		var input = audioContext.createMediaStreamSource(stream);
 		input.connect(audioContext.destination);
 
 		recorder = new Recorder(input);
-		console.log('Recorder initialized');
+		__log('Recorder initialized');
 	}
 
 	function startRecording (button) {
 		recorder && recorder.record();
 		button.disabled = true;
 		button.nextElementSibling.disabled = false;
-		console.log('Recording');
+		__log('Recording...');
 	}
 
 	function stopRecording (button) {
 		recorder && recorder.stop();
 		button.disabled = true;
 		button.previousElementSibling.disabled = false;
-		console.log('Recording was stopped');
+		__log('Recording was stopped');
 
 		createDownloadLink();
 		recorder.clear();
@@ -45,8 +52,9 @@
       		li.appendChild(hf);
       		recordingslist.appendChild(li);
 
-      		console.log('Link was created');
-    	})
+      		__log('Link was created');
+    	});
+
 	}
 
 
@@ -55,13 +63,15 @@
 		var audioCtx = window.AudioContext || window.webkitAudioContext;
 		audioContext = new audioCtx();
 
+		__log('getUserMedia...');
+
 		navigator.getUserMedia = navigator.getUserMedia ||
 	    	                     navigator.webkitGetUserMedia ||
 	        	                 navigator.mozGetUserMedia ||
 	            	             navigator.msGetUserMedia;
 	        
 		navigator.getUserMedia({audio: true}, startUserMedia, function (e) {
-			console.log(e);
+			__log(e);
 		});
 	};
 

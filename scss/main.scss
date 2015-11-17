@@ -62,7 +62,9 @@ a:link, a:visited {
 /***********************************************/
 
 .recordBlock {
+	display: inline-block;
 	width: 37%;
+	padding-top: 20px;
 
 	#recordIndicator {
 		width: 20px;
@@ -70,8 +72,8 @@ a:link, a:visited {
 		border: 1px solid black;
 		border-radius: 50%;
 		position: absolute;
-		left: 75px;
-		top: 47px;
+		left: 45px;
+		top: 304px;
 	}	
 
 	li {
@@ -83,19 +85,28 @@ a:link, a:visited {
 	}
 }
 
+#logBlock {
+	vertical-align: top;
+	padding-top: 20px;
+	display: inline-block;
+	width: 40%;
+	color: white;
+
+}
+
 h1, h2 {
 	color: $blue;
 	padding: 10px;
 }
 
-#tutorial {
-	border: 1px solid #000;
-	float: right;
-	position: absolute;
-	top: 50px;
-	left: 530px;
+.canvasBlock {
+	width: 100%;
+	padding-top: 30px;
+	#tutorial {
+		border: 1px solid #000;
+		top: 50px;
+	}
 }
-
 .btn {
 	cursor: pointer;
 	border: 0px;

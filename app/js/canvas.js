@@ -6,9 +6,6 @@
 		
 		var canvas = document.getElementById('tutorial');
 
-		//var canvasLeft = canvas.offsetLeft,
-			//canvasTop = canvas.offsetTop;
-
 			if (canvas.getContext) {
 
 				var ctx = canvas.getContext('2d');
