@@ -1,7 +1,5 @@
-'use strict';
-	
 (function () {
-
+	'use strict';
 
 
 	window.drow = function () {
@@ -15,12 +13,8 @@
 
 				var ctx = canvas.getContext('2d');
 
-				ctx.fillStyle = "#000";
+				ctx.fillStyle = "black";
 				ctx.fillRect(0, 0, 700, 200); // Экран
-
-				window.drowTriangleOnPlayButton = drowTriangleOnPlayButton;
-				window.drowArrowOnDownloadButton = drowArrowOnDownloadButton;
-				window.drowSquareOnStopButton = drowSquareOnStopButton;
 
 
 			} else {

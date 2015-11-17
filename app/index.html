@@ -6,21 +6,26 @@
 	<title>Web audio API</title>
 	<script type="text/javascript" src = "js/audio.js"></script>
 	<script type="text/javascript" src = "js/canvas.js"></script>
+	<script type="text/javascript" src = "js/recorderjs/recorder.js"></script>
+	<script src = "js/main.js"></script>
+	
 	<!-- bower:css -->
 	<!-- endbower -->
 </head>
 
 <body style="background: url(img/mainBackground.png) #142736;">
-
 	<div class="container">
-		<h1>Web audio API1</h1>
+		<div class="recordBlock">
+			<h1>Web audio API1</h1>	
+			<div id = "recordIndicator"></div>
+			<button id="startBtn" class="btn" onclick="startRecording(this); startIndicator();">Запись</button>
+			<button id="stopBtn" class="btn" onclick="stopRecording(this);">Стоп</button>
 
+			<h2> Записанные звуки </h2>
+			<ul id="recordingslist"></ul>
+		</div>
 		<canvas id="tutorial" width="700" height="200"></canvas>
-		<button id="startBtn" class="button" onclick="start();">Стапт</button>
-		<button id="stopBtn" class="button" onclick="stop();">Стоп</button>
-		<button id="recordBtn" class="button" onclick="record();">Запись</button>
 	</div>
-	
 	
 	<!-- bower:js -->
 	<!-- endbower -->

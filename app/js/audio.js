@@ -1,80 +1,77 @@
-'use strict';
-
 (function () {
-	
-	var source, audioContext;
+	'use strict';
 
-	window.record = function () {
+	var source, audioContext, recorder;
 
-			var audioCtx = window.AudioContext || window.webkitAudioContext;
-			audioContext = new audioCtx();
+	function startUserMedia (stream) {
+		var input = audioContext.createMediaStreamSource(stream);
+		input.connect(audioContext.destination);
 
-			navigator.getUserMedia = navigator.getUserMedia ||
-	                          navigator.webkitGetUserMedia ||
-	                          navigator.mozGetUserMedia ||
-	                          navigator.msGetUserMedia;
+		recorder = new Recorder(input);
+		console.log('Recorder initialized');
+	}
 
-	        
+	function startRecording (button) {
+		recorder && recorder.record();
+		button.disabled = true;
+		button.nextElementSibling.disabled = false;
+		console.log('Recording');
+	}
 
-			navigator.getUserMedia({audio: true}, function (stream) { 
-				source =  audioContext.createMediaStreamSource(stream);
-				console.log(audioContext.state);
-				source.connect(audioContext.destination);
-			}, function (e) {
-				console.log(e);
-			});
+	function stopRecording (button) {
+		recorder && recorder.stop();
+		button.disabled = true;
+		button.previousElementSibling.disabled = false;
+		console.log('Recording was stopped');
 
+		createDownloadLink();
+		recorder.clear();
+	}
+
+	function createDownloadLink () {
+		recorder && recorder.exportWAV(function (blob) {
+			var url = URL.createObjectURL(blob);
+			var li = document.createElement('li');
+    	    var au = document.createElement('audio');
+      		var hf = document.createElement('a');
+
+
+
+      		au.controls = true;
+      		au.src = url;
+      		hf.href = url;
+      		hf.download = new Date().toISOString() + '.wav';
+      		hf.innerHTML = 'Скачать';
+      		hf.className = 'btn';
+      		li.appendChild(au);
+      		li.appendChild(hf);
+      		recordingslist.appendChild(li);
+
+      		console.log('Link was created');
+    	});
 		
-	};
-
-	window.stop = function () {
-		audioContext.close().then(function () {
-			document.getElementById("stopBtn").setAttribute('disabled','disabled');
-			document.getElementById("startBtn").removeAttribute('disabled');
-			console.log(audioContext.state);	
-		});
-	};
-
-	
-	
-	window.start = function () {
-		document.getElementById("startBtn").setAttribute('disabled','disabled');
-		document.getElementById("stopBtn").removeAttribute('disabled');
-		console.log('play!');		
-		source.start();	
-	};
-
-
-
-	window.getData = function() {
-		
-		var xhr = new XMLHttpRequest();
-
-		xhr.open('GET','http://localhost:3000/music/ex.mp3',true);
-		xhr.responseType = 'arraybuffer';
-
-		xhr.onprogress = function (event) {
-			console.log("Загружено: " + event.loaded + " / " + event.total);
-		};
-
-		xhr.onload = function () {
-			var audioData = xhr.response;
-			source = audioCtx.createBufferSource();
-
-				audioCtx.decodeAudioData(audioData, function (buffer) {
-					source.buffer = buffer;
-					console.log(source.buffer);
-					source.connect(audioCtx.destination);
-					
-				});
-			};
-
-		xhr.send();
-  
 	}
 
 
+	window.onload = function () {
 
+		var audioCtx = window.AudioContext || window.webkitAudioContext;
+		audioContext = new audioCtx();
 
+		navigator.getUserMedia = navigator.getUserMedia ||
+	    	                     navigator.webkitGetUserMedia ||
+	        	                 navigator.mozGetUserMedia ||
+	            	             navigator.msGetUserMedia;
+
+	        
+
+		navigator.getUserMedia({audio: true}, startUserMedia, function (e) {
+			console.log(e);
+		});
+
+	};
+
+	window.startRecording = startRecording;
+	window.stopRecording = stopRecording;
 
 })();
