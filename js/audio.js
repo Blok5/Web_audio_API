@@ -23,7 +23,7 @@
 		__log('Recorder initialized');
 	}
 
-	function changeGainValue (value) {
+	function changeGain (value) {
 		if (!volume) return;
 		volumeLevel = value;
 		volume.gain.value = value;
@@ -62,6 +62,7 @@
       		href.download = new Date().toISOString() + '.wav';
       		href.innerHTML = 'Скачать';
       		href.className = 'btn';
+      		href.style.width = "70px";
       		li.appendChild(audio);
       		li.appendChild(href);
       		recordingslist.appendChild(li);
@@ -91,5 +92,5 @@
 	window.startRecording = startRecording;
 	window.stopRecording = stopRecording;
 	window.__log = __log;
-	window.changeGainValue  = changeGainValue;
+	window.changeGain = changeGain;
 })();

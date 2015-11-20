@@ -14,22 +14,29 @@
 </head>
 
 <body style="background: url(img/mainBackground.png) #142736;">
+
 	<div class="container">
+		<h1>Web audio API</h1>
 		<div class="canvasBlock">
 			<canvas id="tutorial" width="700" height="200"></canvas>
 		</div>
+
 		<div class="recordBlock">
-			<h1>Web audio API1</h1>	
+				
 			<div id = "recordIndicator"></div>
-			<button id="startBtn" class="btn" onclick="startRecording(this); startIndicator();">Запись</button>
-			<button id="stopBtn" class="btn" onclick="stopRecording(this);" disabled>Стоп</button>
+			<div class="buttons">
+				<button id="startBtn" class="btn" onclick="startRecording(this); startIndicator();">Запись</button>
+				<button id="stopBtn" class="btn" onclick="stopRecording(this);" disabled>Стоп</button>
+			</div>
+			<span>Громкость мониторов</span>
 			<input id = "gainRange" type="range" value="0" min = "0" max = "1" step = "0.1" 
-			onchange="changeGainValue(this.value)"></input>
+			onchange="changeGain(this.value)"></input>
 			<span id = "showRangeValue"></span>
 
 			<h2> Записанные звуки </h2>
 			<ul id="recordingslist"></ul>
 		</div>
+
 		<div id="logBlock">
 			<ul id="logList"></ul>
 		</div>
