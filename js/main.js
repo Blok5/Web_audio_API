@@ -1,6 +1,9 @@
 (function () {
 	'use strict';
 
+	/**
+	* Animates record indicator"
+	*/
 	function startIndicator () {		
 		
 		var indic = document.getElementById('recordIndicator');
@@ -20,11 +23,8 @@
 		}, false);
 	}
 
-	function changeGainValue (value) {
-		__log(value);
-		document.getElementById('showRangeValue').innerHTML = value * 100 + '%';
-	}
+	
 
 	window.startIndicator = startIndicator;
-	window.changeGainValue  = changeGainValue;
+
 })();

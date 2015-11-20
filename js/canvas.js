@@ -1,7 +1,9 @@
 (function () {
 	'use strict';
 
-
+	/**
+	* drowes canvas window
+	*/
 	window.drow = function () {
 		
 		var canvas = document.getElementById('tutorial');

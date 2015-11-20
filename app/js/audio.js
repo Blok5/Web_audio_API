@@ -1,8 +1,15 @@
 (function () {
 	'use strict';
 
-	var audioContext, recorder, volumeLevel = 0, volume;
+	var audioContext, /** @define {MediaStreamAudioSourceNode=} */
+		recorder, 	/** @define {Recorder=} */
+		volumeLevel = 0, //* @define {number} */
+		volume;  //* @define {number=} */
 
+	/**
+	* Displays information in div id="logList"
+	* @param {string} text - the text which will display
+	*/
 	function __log (text) {
 		var li = document.createElement('li');
 		li.innerHTML = text;
@@ -10,8 +17,13 @@
 
 	}
 
+	/**
+	*  Creates routing nodes
+	*  @params {MediaStream} stream - stream of audio data
+	*/
 	function startUserMedia (stream) {
 		var input = audioContext.createMediaStreamSource(stream);
+
 		volume = audioContext.createGain();
 
 		volume.gain.value = volumeLevel;
@@ -20,9 +32,14 @@
 		volume.connect(audioContext.destination);
 
 		recorder = new Recorder(input);
+		__log(Object.prototype.toString.call(recorder));
 		__log('Recorder initialized');
 	}
 
+	/**
+	*  Changes value of monitor volume 
+	*  @params {number} value - the value which will set 
+	*/
 	function changeGain (value) {
 		if (!volume) { return };
 		volumeLevel = value;
@@ -32,6 +49,10 @@
 		document.getElementById('showRangeValue').innerHTML = value * 100 + '%';
 	}
 
+	/**
+	*  Starts recording
+	*  @params {HTMLElement} button - HTMLElement which will use for set properties
+	*/
 	function startRecording (button) {
 		recorder && recorder.record();
 		button.disabled = true;
@@ -39,6 +60,10 @@
 		__log('Recording...');
 	}
 
+	/**
+	*  Stops recording
+	*  @params {HTMLElement} button - HTMLElement which will use for set properties
+	*/
 	function stopRecording (button) {
 		recorder && recorder.stop();
 		button.disabled = true;
@@ -49,6 +74,9 @@
 		recorder.clear();
 	}
 
+	/**
+	*  Creates download link after recording
+	*/
 	function createDownloadLink () {
 		recorder && recorder.exportWAV(function (blob) {
 			var url = URL.createObjectURL(blob);
@@ -69,9 +97,12 @@
 
       		__log('Link was created');
     	});
-
 	}
 
+	/**
+	* "onload" event handle
+	* Checks getUserMedia using possibility 
+	*/
 	window.onload = function () {
 
 		var audioCtx = window.AudioContext || window.webkitAudioContext;
