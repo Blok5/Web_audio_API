@@ -83,6 +83,15 @@ a:link, a:visited {
 	audio {
 		padding-right: 10px;
 	}
+
+	#gainRange {
+		margin-left: 30px;
+	}
+
+	#showRangeValue {
+		font-weight: 700;
+		vertical-align: top;
+	}
 }
 
 #logBlock {
@@ -93,7 +102,9 @@ a:link, a:visited {
 	color: white;
 
 }
-
+span {
+	color: $blue;
+}
 h1, h2 {
 	color: $blue;
 	padding: 10px;

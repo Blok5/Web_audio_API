@@ -20,5 +20,11 @@
 		}, false);
 	}
 
+	function changeGainValue (value) {
+		__log(value);
+		document.getElementById('showRangeValue').innerHTML = value * 100 + '%';
+	}
+
 	window.startIndicator = startIndicator;
+	window.changeGainValue  = changeGainValue;
 })();

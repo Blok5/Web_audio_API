@@ -22,7 +22,10 @@
 			<h1>Web audio API1</h1>	
 			<div id = "recordIndicator"></div>
 			<button id="startBtn" class="btn" onclick="startRecording(this); startIndicator();">Запись</button>
-			<button id="stopBtn" class="btn" onclick="stopRecording(this);">Стоп</button>
+			<button id="stopBtn" class="btn" onclick="stopRecording(this);" disabled>Стоп</button>
+			<input id = "gainRange" type="range" value="0" min = "0" max = "1" step = "0.1" 
+			onchange="changeGainValue(this.value)"></input>
+			<span id = "showRangeValue"></span>
 
 			<h2> Записанные звуки </h2>
 			<ul id="recordingslist"></ul>

@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 
-	var audioContext, recorder;
+	var audioContext, recorder, volumeLevel = 0, volume;
 
 	function __log (text) {
 		var li = document.createElement('li');
@@ -12,10 +12,24 @@
 
 	function startUserMedia (stream) {
 		var input = audioContext.createMediaStreamSource(stream);
-		input.connect(audioContext.destination);
+		volume = audioContext.createGain();
+
+		volume.gain.value = volumeLevel;
+
+		input.connect(volume);
+		volume.connect(audioContext.destination);
 
 		recorder = new Recorder(input);
 		__log('Recorder initialized');
+	}
+
+	function changeGainValue (value) {
+		if (!volume) return;
+		volumeLevel = value;
+		volume.gain.value = value;
+		__log(volume.gain.value);
+		
+		document.getElementById('showRangeValue').innerHTML = value * 100 + '%';
 	}
 
 	function startRecording (button) {
@@ -39,24 +53,23 @@
 		recorder && recorder.exportWAV(function (blob) {
 			var url = URL.createObjectURL(blob);
 			var li = document.createElement('li');
-    	    var au = document.createElement('audio');
-      		var hf = document.createElement('a');
+    	    var audio = document.createElement('audio');
+      		var href = document.createElement('a');
 
-      		au.controls = true;
-      		au.src = url;
-      		hf.href = url;
-      		hf.download = new Date().toISOString() + '.wav';
-      		hf.innerHTML = 'Скачать';
-      		hf.className = 'btn';
-      		li.appendChild(au);
-      		li.appendChild(hf);
+      		audio.controls = true;
+      		audio.src = url;
+      		href.href = url;
+      		href.download = new Date().toISOString() + '.wav';
+      		href.innerHTML = 'Скачать';
+      		href.className = 'btn';
+      		li.appendChild(audio);
+      		li.appendChild(href);
       		recordingslist.appendChild(li);
 
       		__log('Link was created');
     	});
 
 	}
-
 
 	window.onload = function () {
 
@@ -77,5 +90,6 @@
 
 	window.startRecording = startRecording;
 	window.stopRecording = stopRecording;
-
+	window.__log = __log;
+	window.changeGainValue  = changeGainValue;
 })();
