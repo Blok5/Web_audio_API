@@ -24,7 +24,7 @@
 	}
 
 	function changeGain (value) {
-		if (!volume) return;
+		if (!volume) { return };
 		volumeLevel = value;
 		volume.gain.value = value;
 		__log(volume.gain.value);
