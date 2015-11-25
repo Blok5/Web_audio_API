@@ -23,8 +23,6 @@
 		}, false);
 	}
 
-	
-
 	window.startIndicator = startIndicator;
 
 })();

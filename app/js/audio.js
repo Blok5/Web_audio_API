@@ -25,9 +25,10 @@
 	*/
 	function startUserMedia (stream) {
 		var input = audioContext.createMediaStreamSource(stream);
-		analyser = audioContext.createAnalyser();
 
+		analyser = audioContext.createAnalyser();
 		analyser.fftSize = 2048;
+		canvasDrower.init();
 		bufferLength = analyser.frequencyBinCount;
 		dataArray = new Uint8Array(bufferLength);
 
@@ -44,7 +45,7 @@
 
 		__log('Recorder initialized');
 		__log(Object.prototype.toString.call(analyser));
-		draw();
+		canvasDrower.drawWaveform();
 	}
 
 	/**
@@ -114,7 +115,7 @@
 	* "onload" event handle
 	* Checks getUserMedia using possibility 
 	*/
-	window.onload = function () {
+	function initAudio () {
 
 		var audioCtx = window.AudioContext || window.webkitAudioContext;
 		audioContext = new audioCtx();
@@ -129,70 +130,74 @@
 		navigator.getUserMedia({audio: true}, startUserMedia, function (e) {
 			__log(e);
 		});
-	};
-
-	/**
-	* drowes canvas window
-	*/
-	function startCanvas () {
-		
-		var HEIGHTCANVAS = 200, //* @define {number} */
-			WIDTHCANVAS = 700; //* @define {number} */
-		
-		var canvas = document.getElementById('tutorial');
-
-		if (canvas.getContext) {
-
-			var ctx = canvas.getContext('2d');
-				ctx.fillStyle = "black";
-				ctx.fillRect(0, 0, WIDTHCANVAS, HEIGHTCANVAS); // Экран
-
-			/**
-			* drowes waveform
-			*/
-			window.draw = function() {
-				var x = 0; //* define {number} - position for drowing segments /*
-
-				requestAnimationFrame(draw);
-				analyser.getByteTimeDomainData(dataArray);
-
-				ctx.fillStyle = 'rgb(200, 200, 200)';
-				ctx.fillRect(0, 0, WIDTHCANVAS, HEIGHTCANVAS)
-
-				ctx.lineWidth = 2;
-				ctx.strokeStyle = 'rgb(0,0,0)';
-
-				ctx.beginPath();
-
-				var sliceWidth = WIDTHCANVAS * 1.0 / bufferLength;
-
-				for(let i = 0; i < bufferLength; i++) {
-		   
-			        var v = dataArray[i] / 128.0;
-			        var y = v * HEIGHTCANVAS/2;
-
-			        if(i === 0) {
-			          ctx.moveTo(x, y);
-			        } else {
-			          ctx.lineTo(x, y);
-			        }
-
-			        x += sliceWidth;
-			    }
-
-			    ctx.lineTo(canvas.width, canvas.height/2);
-      			ctx.stroke();				
-			}
-
-		} else {
-			alert('canvas не поддерживается браузером!');			
-		}
 	}
 
+	/**
+	* main Drower which include different functions
+	*/
+	var canvasDrower = (function() {
+		var ctx = null,
+			canvas = null;
 
-	window.startCanvas = startCanvas;
+		/**
+		* canvas inicialization 
+		*/	
+		var init = function () {
+			canvas = document.getElementById('canvas');
+			ctx = canvas.getContext('2d');
+			canvas.width = 700;
+			canvas.height = 200;
+			ctx.fillStyle = "black";
+			ctx.fillRect(0, 0, canvas.width, canvas.height); 
+		};	
+
+		/**
+		* drowes waveform
+		*/
+		var drawWaveform = function() {
+			var x = 0; //* define {number} - position for drowing segments /*
+
+			requestAnimationFrame(drawWaveform);
+			analyser.getByteTimeDomainData(dataArray);
+
+			ctx.fillStyle = 'rgb(200, 200, 200)';
+			ctx.fillRect(0, 0, canvas.width, canvas.height)
+			ctx.lineWidth = 1;
+			ctx.strokeStyle = 'rgb(0,0,0)';
+
+			ctx.beginPath();
+
+			var sliceWidth = canvas.width / bufferLength;
+
+			for(let i = 0; i < bufferLength; i++) {
+		   
+		        var v = dataArray[i] / 128.0;
+		        var y = v * canvas.height/2;
+
+		        if (i === 0) {
+		          ctx.moveTo(x, y);
+		        } else {
+		          ctx.lineTo(x, y);
+		        }
+
+		        x += sliceWidth;
+		    }
+
+		    ctx.lineTo(canvas.width, canvas.height/2);
+     		ctx.stroke();				
+		};
+
+		return {
+			init : init,
+			drawWaveform: drawWaveform
+		};
+	})();
+
+
+
 	window.startRecording = startRecording;
 	window.stopRecording = stopRecording;
-	window.__log = __log;
 	window.changeGain = changeGain;
+
+	window.addEventListener('load', initAudio);
 })();
