@@ -1,19 +1,20 @@
 (function () {
 	'use strict';
 
-	var audioContext, /** @define {MediaStreamAudioSourceNode=} */
-		recorder, 	/** @define {Recorder=} */
+	var audioContext = null, /** @define {MediaStreamAudioSourceNode=} */
+		recorder = null, 	/** @define {Recorder=} */
 		volumeLevel = 0, //* @define {number} */
-		analyser, //* @define {AnaluserNode} */
-		bufferLength, //* @define {number} */
-		dataArray, //* @define {Uint8Array} */
-		volume;  //* @define {number=} */
+		analyser = null, //* @define {AnaluserNode} */
+		bufferLength = null, //* @define {number} */
+		dataArray = null, //* @define {Uint8Array} */
+		volume = null;  //* @define {number=} */
 
 	/**
 	* Displays information in div id="logList"
 	* @param {string} text - the text which will display
 	*/
 	function __log (text) {
+		var logList = document.getElementById('logList');
 		var li = document.createElement('li');
 		li.innerHTML = text;
 		logList.appendChild(li);
@@ -193,11 +194,24 @@
 		};
 	})();
 
-
-
-	window.startRecording = startRecording;
-	window.stopRecording = stopRecording;
 	window.changeGain = changeGain;
 
-	window.addEventListener('load', initAudio);
+	document.addEventListener('DOMContentLoaded', function () {
+		initAudio();
+
+		document.getElementById('stopBtn').onclick = function () {
+			stopRecording(this);	
+		};
+
+		document.getElementById('startBtn').onclick = function () {
+			startRecording(this);
+			startIndicator();
+		};
+
+		document.getElementById('gainRange').onchange = function () {
+			changeGain(this.value);	
+		};
+
+	});
+
 })();
