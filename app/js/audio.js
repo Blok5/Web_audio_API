@@ -4,6 +4,9 @@
 	var audioContext, /** @define {MediaStreamAudioSourceNode=} */
 		recorder, 	/** @define {Recorder=} */
 		volumeLevel = 0, //* @define {number} */
+		analyser, //* @define {AnaluserNode} */
+		bufferLength, //* @define {number} */
+		dataArray, //* @define {Uint8Array} */
 		volume;  //* @define {number=} */
 
 	/**
@@ -14,7 +17,6 @@
 		var li = document.createElement('li');
 		li.innerHTML = text;
 		logList.appendChild(li);
-
 	}
 
 	/**
@@ -23,17 +25,26 @@
 	*/
 	function startUserMedia (stream) {
 		var input = audioContext.createMediaStreamSource(stream);
+		analyser = audioContext.createAnalyser();
+
+		analyser.fftSize = 2048;
+		bufferLength = analyser.frequencyBinCount;
+		dataArray = new Uint8Array(bufferLength);
+
+		__log('length of Data dataArray = ' + bufferLength);
 
 		volume = audioContext.createGain();
-
 		volume.gain.value = volumeLevel;
 
 		input.connect(volume);
-		volume.connect(audioContext.destination);
+		volume.connect(analyser);
+		analyser.connect(audioContext.destination);
 
 		recorder = new Recorder(input);
-		__log(Object.prototype.toString.call(recorder));
+
 		__log('Recorder initialized');
+		__log(Object.prototype.toString.call(analyser));
+		draw();
 	}
 
 	/**
@@ -120,6 +131,66 @@
 		});
 	};
 
+	/**
+	* drowes canvas window
+	*/
+	function startCanvas () {
+		
+		var HEIGHTCANVAS = 200, //* @define {number} */
+			WIDTHCANVAS = 700; //* @define {number} */
+		
+		var canvas = document.getElementById('tutorial');
+
+		if (canvas.getContext) {
+
+			var ctx = canvas.getContext('2d');
+				ctx.fillStyle = "black";
+				ctx.fillRect(0, 0, WIDTHCANVAS, HEIGHTCANVAS); // Экран
+
+			/**
+			* drowes waveform
+			*/
+			window.draw = function() {
+				var x = 0; //* define {number} - position for drowing segments /*
+
+				requestAnimationFrame(draw);
+				analyser.getByteTimeDomainData(dataArray);
+
+				ctx.fillStyle = 'rgb(200, 200, 200)';
+				ctx.fillRect(0, 0, WIDTHCANVAS, HEIGHTCANVAS)
+
+				ctx.lineWidth = 2;
+				ctx.strokeStyle = 'rgb(0,0,0)';
+
+				ctx.beginPath();
+
+				var sliceWidth = WIDTHCANVAS * 1.0 / bufferLength;
+
+				for(let i = 0; i < bufferLength; i++) {
+		   
+			        var v = dataArray[i] / 128.0;
+			        var y = v * HEIGHTCANVAS/2;
+
+			        if(i === 0) {
+			          ctx.moveTo(x, y);
+			        } else {
+			          ctx.lineTo(x, y);
+			        }
+
+			        x += sliceWidth;
+			    }
+
+			    ctx.lineTo(canvas.width, canvas.height/2);
+      			ctx.stroke();				
+			}
+
+		} else {
+			alert('canvas не поддерживается браузером!');			
+		}
+	}
+
+
+	window.startCanvas = startCanvas;
 	window.startRecording = startRecording;
 	window.stopRecording = stopRecording;
 	window.__log = __log;
