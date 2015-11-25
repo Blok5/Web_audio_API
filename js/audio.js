@@ -7,7 +7,9 @@
 		analyser = null, //* @define {AnaluserNode} */
 		bufferLength = null, //* @define {number} */
 		dataArray = null, //* @define {Uint8Array} */
-		volume = null;  //* @define {number=} */
+		volume = null,  //* @define {number=} */
+		drawVisual = null; //* 
+
 
 	/**
 	* Displays information in div id="logList"
@@ -29,11 +31,11 @@
 
 		analyser = audioContext.createAnalyser();
 		analyser.fftSize = 2048;
-		canvasDrower.init();
+		canvasDrawer.init();
 		bufferLength = analyser.frequencyBinCount;
 		dataArray = new Uint8Array(bufferLength);
 
-		__log('length of Data dataArray = ' + bufferLength);
+		__log('length of dataArray = ' + bufferLength);
 
 		volume = audioContext.createGain();
 		volume.gain.value = volumeLevel;
@@ -45,8 +47,6 @@
 		recorder = new Recorder(input);
 
 		__log('Recorder initialized');
-		__log(Object.prototype.toString.call(analyser));
-		canvasDrower.drawWaveform();
 	}
 
 	/**
@@ -136,7 +136,7 @@
 	/**
 	* main Drower which include different functions
 	*/
-	var canvasDrower = (function() {
+	var canvasDrawer = (function() {
 		var ctx = null,
 			canvas = null;
 
@@ -158,14 +158,18 @@
 		var drawWaveform = function() {
 			var x = 0; //* define {number} - position for drowing segments /*
 
-			requestAnimationFrame(drawWaveform);
+			analyser.fftSize = 2048;
+			bufferLength = analyser.frequencyBinCount;
+			dataArray = new Uint8Array(bufferLength);
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			drawVisual = requestAnimationFrame(drawWaveform);
 			analyser.getByteTimeDomainData(dataArray);
 
 			ctx.fillStyle = 'rgb(200, 200, 200)';
 			ctx.fillRect(0, 0, canvas.width, canvas.height)
 			ctx.lineWidth = 1;
 			ctx.strokeStyle = 'rgb(0,0,0)';
-
 			ctx.beginPath();
 
 			var sliceWidth = canvas.width / bufferLength;
@@ -173,7 +177,7 @@
 			for(let i = 0; i < bufferLength; i++) {
 		   
 		        var v = dataArray[i] / 128.0;
-		        var y = v * canvas.height/2;
+		        var y = v * canvas.height / 2;
 
 		        if (i === 0) {
 		          ctx.moveTo(x, y);
@@ -188,13 +192,45 @@
      		ctx.stroke();				
 		};
 
+		/**
+		* drowes a frequency bar graph
+		*/
+		var drawBarGraph = function () {
+			var x = 0;	//* define {number} - position for drowing segments /*
+
+			analyser.fftSize = 256;
+			bufferLength = analyser.frequencyBinCount;
+			dataArray = new Uint8Array(bufferLength);
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+			drawVisual = requestAnimationFrame(drawBarGraph);
+
+			analyser.getByteFrequencyData(dataArray);
+
+			ctx.fillStyle = 'rgb(0,0,0)';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+			var barWidth = (canvas.width / bufferLength ) * 2.5;
+			var barHeight = null;
+
+			for(var i = 0; i < bufferLength; i++) {
+		        barHeight = dataArray[i];
+
+		        ctx.fillStyle = 'rgb(0, ' + (barHeight + 100) + ', 128)';
+		        ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight);
+
+		        x += barWidth + 1;
+		    }
+		    
+		};
+
 		return {
 			init : init,
-			drawWaveform: drawWaveform
+			drawWaveform: drawWaveform,
+			drawBarGraph: drawBarGraph
 		};
-	})();
 
-	window.changeGain = changeGain;
+	})();
 
 	document.addEventListener('DOMContentLoaded', function () {
 		initAudio();
@@ -210,6 +246,16 @@
 
 		document.getElementById('gainRange').onchange = function () {
 			changeGain(this.value);	
+		};
+
+		document.getElementById('bar').onclick = function () {
+			cancelAnimationFrame(drawVisual);
+			canvasDrawer.drawBarGraph();
+		};
+
+		document.getElementById('wave').onclick = function () {
+			cancelAnimationFrame(drawVisual);
+			canvasDrawer.drawWaveform();
 		};
 
 	});
