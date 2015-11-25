@@ -8,7 +8,7 @@
 		bufferLength = null, //* @define {number} */
 		dataArray = null, //* @define {Uint8Array} */
 		volume = null,  //* @define {number=} */
-		drawVisual = null; //* 
+		drawVisual = null; //* @define {number} */
 
 
 	/**
@@ -30,12 +30,7 @@
 		var input = audioContext.createMediaStreamSource(stream);
 
 		analyser = audioContext.createAnalyser();
-		analyser.fftSize = 2048;
 		canvasDrawer.init();
-		bufferLength = analyser.frequencyBinCount;
-		dataArray = new Uint8Array(bufferLength);
-
-		__log('length of dataArray = ' + bufferLength);
 
 		volume = audioContext.createGain();
 		volume.gain.value = volumeLevel;
@@ -172,7 +167,7 @@
 			ctx.strokeStyle = 'rgb(0,0,0)';
 			ctx.beginPath();
 
-			var sliceWidth = canvas.width / bufferLength;
+			var sliceWidth = canvas.width / bufferLength; // offset the x-axis
 
 			for(let i = 0; i < bufferLength; i++) {
 		   
@@ -206,14 +201,13 @@
 			drawVisual = requestAnimationFrame(drawBarGraph);
 
 			analyser.getByteFrequencyData(dataArray);
-
 			ctx.fillStyle = 'rgb(0,0,0)';
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 			var barWidth = (canvas.width / bufferLength ) * 2.5;
 			var barHeight = null;
 
-			for(var i = 0; i < bufferLength; i++) {
+			for(let i = 0; i < bufferLength; i++) {
 		        barHeight = dataArray[i];
 
 		        ctx.fillStyle = 'rgb(0, ' + (barHeight + 100) + ', 128)';
