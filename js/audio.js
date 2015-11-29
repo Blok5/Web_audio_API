@@ -8,6 +8,7 @@
 		bufferLength = null, //* @define {number} */
 		dataArray = null, //* @define {Uint8Array} */
 		volume = null,  //* @define {number=} */
+		recIndex = 0,
 		drawVisual = null; //* @define {number} */
 
 
@@ -79,6 +80,7 @@
 		__log('Recording was stopped');
 
 		createDownloadLink();
+		recorder.getBuffer(canvasDrawer.gotBuf);
 		recorder.clear();
 	}
 
@@ -214,14 +216,32 @@
 		        ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight);
 
 		        x += barWidth + 1;
-		    }
-		    
+		    }	    
 		};
+
+
+		/**
+		* Initializes draw canvas and run function, which drawes recorded data
+		* @params {array} dataArrays - Array with 2 arrays(if stereo) with recorded data
+		*/		
+		var gotBuf = function(dataArrays) {
+			var drawCanvas = document.getElementById('drawBuffer');
+			var drawCtx = drawCanvas.getContext('2d');
+			var data = dataArrays[0];
+
+			drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
+			drawCtx.fillStyle = "black";
+			drawCtx.fillRect(0, 0, drawCanvas.width, drawCanvas.height); 
+
+			main.drawRecorderData(drawCanvas.width, drawCanvas.height, drawCtx, data);
+		};
+
 
 		return {
 			init : init,
 			drawWaveform: drawWaveform,
-			drawBarGraph: drawBarGraph
+			drawBarGraph: drawBarGraph,
+			gotBuf: gotBuf
 		};
 
 	})();
@@ -235,7 +255,7 @@
 
 		document.getElementById('startBtn').onclick = function () {
 			startRecording(this);
-			startIndicator();
+			main.startIndicator();
 		};
 
 		document.getElementById('gainRange').onchange = function () {

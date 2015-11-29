@@ -1,4 +1,4 @@
-(function () {
+var main = (function () {
 	'use strict';
 
 	/**
@@ -23,6 +23,43 @@
 		}, false);
 	}
 
-	window.startIndicator = startIndicator;
+	/**
+	* Drawes recorded data
+	* @params {number} width - width of draw Canvas
+	* @params {number} height - height of draw canvas
+	* @params {CanvasRenderingContext2D} drowCtx - context of draw canvas
+	* @params {Array} data - Array with recorded data
+	*/	
+	function drawRecorderData(width, height, drawCtx, data) {
+
+		    var step = Math.ceil( data.length /  width) || 1;
+		    var amp = height / 2;
+		
+			drawCtx.fillStyle = 'rgb(0, 128, 128)';
+
+		    for(let i=0; i < width; i++) {
+
+		        var min = 1.0;
+		        var max = -1.0;
+
+		        for (let j=0; j < step; j++) {
+		            var datum = data[(i * step) + j]; 
+
+		            if ( datum < min ) {
+		                min = datum;
+		            }
+		            if ( datum > max ) {
+		                max = datum;
+		            }
+		        }
+
+		        drawCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
+		    }
+	}
+
+	return {
+		drawRecorderData: drawRecorderData,
+		startIndicator: startIndicator
+	}
 
 })();
