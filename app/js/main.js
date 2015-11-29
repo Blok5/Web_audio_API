@@ -30,12 +30,15 @@ var main = (function () {
 	* @params {CanvasRenderingContext2D} drowCtx - context of draw canvas
 	* @params {Array} data - Array with recorded data
 	*/	
-	function drawRecorderData(width, height, drawCtx, data) {
-
-		    var step = Math.ceil( data.length /  width) || 1;
+	function drawRecorderData(width, height, drawCtx, data) {	    
 		    var amp = height / 2;
-		
+			var step = Math.ceil( data.length /  width) || 1;
+
+			drawCtx.fillStyle = "black";
+			drawCtx.fillRect(0, 0, 700, 200); 
+
 			drawCtx.fillStyle = 'rgb(0, 128, 128)';
+
 
 		    for(let i=0; i < width; i++) {
 

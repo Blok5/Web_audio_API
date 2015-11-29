@@ -8,9 +8,12 @@
 		bufferLength = null, //* @define {number} */
 		dataArray = null, //* @define {Uint8Array} */
 		volume = null,  //* @define {number=} */
-		recIndex = 0,
 		drawVisual = null; //* @define {number} */
 
+	/*
+	* TODO:
+	* Fix the ability to add links to download
+	*/
 
 	/**
 	* Displays information in div id="logList"
@@ -79,8 +82,9 @@
 		button.previousElementSibling.disabled = false;
 		__log('Recording was stopped');
 
-		createDownloadLink();
+		
 		recorder.getBuffer(canvasDrawer.gotBuf);
+	//	createDownloadLink();
 		recorder.clear();
 	}
 
@@ -134,19 +138,22 @@
 	* main Drower which include different functions
 	*/
 	var canvasDrawer = (function() {
-		var ctx = null,
-			canvas = null;
-
+		var ctx = null, /** @define {CanvasRenderingContext2D} - context for canvas*/
+			canvas = null, /** @define {HTMLCanvasElement} - context for draw canvas*/
+			drawCanvas = null,  /** @define {HTMLCanvasElement} - context for draw canvas*/
+			drawCtx = null; /** @define {CanvasRenderingContext2D} - context for draw canvas*/
 		/**
 		* canvas inicialization 
 		*/	
-		var init = function () {
+		var init = function () {		
 			canvas = document.getElementById('canvas');
 			ctx = canvas.getContext('2d');
-			canvas.width = 700;
-			canvas.height = 200;
+			drawCanvas = document.getElementById('drawBuffer');
+			drawCtx = drawCanvas.getContext('2d');
 			ctx.fillStyle = "black";
-			ctx.fillRect(0, 0, canvas.width, canvas.height); 
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			drawCtx.fillStyle = "black";
+			drawCtx.fillRect(0, 0, drawCanvas.width, drawCanvas.height);  
 		};	
 
 		/**
@@ -225,13 +232,9 @@
 		* @params {array} dataArrays - Array with 2 arrays(if stereo) with recorded data
 		*/		
 		var gotBuf = function(dataArrays) {
-			var drawCanvas = document.getElementById('drawBuffer');
-			var drawCtx = drawCanvas.getContext('2d');
 			var data = dataArrays[0];
 
 			drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
-			drawCtx.fillStyle = "black";
-			drawCtx.fillRect(0, 0, drawCanvas.width, drawCanvas.height); 
 
 			main.drawRecorderData(drawCanvas.width, drawCanvas.height, drawCtx, data);
 		};
