@@ -12,7 +12,7 @@
 
 	/*
 	* TODO:
-	* Fix the ability to add links to download
+	* 
 	*/
 
 	/**
@@ -66,7 +66,7 @@
 	*  @params {HTMLElement} button - HTMLElement which will use for set properties
 	*/
 	function startRecording (button) {
-		recorder && recorder.record();
+		recorder.record();
 		button.disabled = true;
 		button.nextElementSibling.disabled = false;
 		__log('Recording...');
@@ -77,41 +77,16 @@
 	*  @params {HTMLElement} button - HTMLElement which will use for set properties
 	*/
 	function stopRecording (button) {
-		recorder && recorder.stop();
+		recorder.stop();
 		button.disabled = true;
 		button.previousElementSibling.disabled = false;
 		__log('Recording was stopped');
-
 		
 		recorder.getBuffer(canvasDrawer.gotBuf);
-	//	createDownloadLink();
-		recorder.clear();
+
 	}
 
-	/**
-	*  Creates download link after recording
-	*/
-	function createDownloadLink () {
-		recorder && recorder.exportWAV(function (blob) {
-			var url = URL.createObjectURL(blob);
-			var li = document.createElement('li');
-    	    var audio = document.createElement('audio');
-      		var href = document.createElement('a');
 
-      		audio.controls = true;
-      		audio.src = url;
-      		href.href = url;
-      		href.download = new Date().toISOString() + '.wav';
-      		href.innerHTML = 'Скачать';
-      		href.className = 'btn';
-      		href.style.width = "70px";
-      		li.appendChild(audio);
-      		li.appendChild(href);
-      		recordingslist.appendChild(li);
-
-      		__log('Link was created');
-    	});
-	}
 
 	/**
 	* "onload" event handle
@@ -134,6 +109,8 @@
 		});
 	}
 
+
+
 	/**
 	* main Drower which include different functions
 	*/
@@ -142,6 +119,7 @@
 			canvas = null, /** @define {HTMLCanvasElement} - context for draw canvas*/
 			drawCanvas = null,  /** @define {HTMLCanvasElement} - context for draw canvas*/
 			drawCtx = null; /** @define {CanvasRenderingContext2D} - context for draw canvas*/
+		var recIndex = 0;
 		/**
 		* canvas inicialization 
 		*/	
@@ -201,7 +179,7 @@
 		*/
 		var drawBarGraph = function () {
 			var x = 0;	//* define {number} - position for drowing segments /*
-
+			
 			analyser.fftSize = 256;
 			bufferLength = analyser.frequencyBinCount;
 			dataArray = new Uint8Array(bufferLength);
@@ -235,8 +213,11 @@
 			var data = dataArrays[0];
 
 			drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
-
 			main.drawRecorderData(drawCanvas.width, drawCanvas.height, drawCtx, data);
+
+			createDownloadLink();
+
+			recorder.clear();
 		};
 
 
@@ -248,6 +229,32 @@
 		};
 
 	})();
+
+			/**
+			*  Creates download link after recording
+			*/
+			function createDownloadLink () {
+				recorder.exportWAV(function (blob) {
+					console.log(blob);
+					var url = URL.createObjectURL(blob);
+					var li = document.createElement('li');
+		    	    var audio = document.createElement('audio');
+		      		var href = document.createElement('a');
+
+		      		audio.controls = true;
+		      		audio.src = url;
+		      		href.href = url;
+		      		href.download = new Date().toISOString() + '.wav';
+		      		href.innerHTML = 'Скачать';
+		      		href.className = 'btn';
+		      		href.style.width = "70px";
+		      		li.appendChild(audio);
+		      		li.appendChild(href);
+		      		recordingslist.appendChild(li);
+
+		      		__log('Link was created');
+		    	});
+			}
 
 	document.addEventListener('DOMContentLoaded', function () {
 		initAudio();

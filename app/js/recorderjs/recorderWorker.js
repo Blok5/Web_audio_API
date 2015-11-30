@@ -1,7 +1,7 @@
 var recLength = 0,
   recBuffers = [],
-  sampleRate,
-  numChannels;
+  sampleRate = null,
+  numChannels = null;
 
 this.onmessage = function(e){
   switch(e.data.command){
@@ -26,7 +26,9 @@ this.onmessage = function(e){
 function init(config){
   sampleRate = config.sampleRate;
   numChannels = config.numChannels;
+  console.log('recorderWorker' + numChannels)
   initBuffers();
+
 }
 
 function record(inputBuffer){
@@ -34,6 +36,7 @@ function record(inputBuffer){
     recBuffers[channel].push(inputBuffer[channel]);
   }
   recLength += inputBuffer[0].length;
+
 }
 
 function exportWAV(type){
@@ -41,6 +44,7 @@ function exportWAV(type){
   for (var channel = 0; channel < numChannels; channel++){
     buffers.push(mergeBuffers(recBuffers[channel], recLength));
   }
+
   if (numChannels === 2){
       var interleaved = interleave(buffers[0], buffers[1]);
   } else {

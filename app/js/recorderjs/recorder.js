@@ -47,6 +47,7 @@
 
     this.stop = function(){
       recording = false;
+      console.log('numChannels ' + numChannels);
     }
 
     this.clear = function(){
